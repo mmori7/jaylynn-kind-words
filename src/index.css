@@ -2,12 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Pacifico&display=swap');
+
 
 @layer base {
   :root {
-    --background: 30 50% 97%;
-    --foreground: 220 20% 25%;
+    --background: 30 40% 95%;
+    --foreground: 220 30% 15%;
 
     --card: 30 40% 95%;
     --card-foreground: 220 20% 25%;
