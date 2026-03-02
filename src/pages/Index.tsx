@@ -88,7 +88,7 @@ const Index = () => {
           Hey Jaylynn!
         </h1>
         <p className="max-w-md text-lg text-muted-foreground font-body">
-          Press the button and see what we all think of you 💛
+          Press the button and see what I think of you 💛
         </p>
 
         <button
