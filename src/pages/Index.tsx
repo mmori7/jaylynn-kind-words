@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef } from "react";
 import FloatingCompliment from "@/components/FloatingCompliment";
 import Sparkles from "@/components/Sparkles";
 
@@ -9,7 +9,7 @@ const compliments = [
   "You are so smart 🧠",
 ];
 
-const PIANO_VIOLIN_URL = "https://cdn.pixabay.com/audio/2024/11/29/audio_d60d5a4417.mp3";
+const YOUTUBE_VIDEO_ID = "SPxwz_id6So";
 
 interface FloatingItem {
   id: number;
@@ -22,22 +22,12 @@ const Index = () => {
   const [floatingItems, setFloatingItems] = useState<FloatingItem[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showSparkles, setShowSparkles] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const counterRef = useRef(0);
-
-  useEffect(() => {
-    audioRef.current = new Audio(PIANO_VIOLIN_URL);
-    audioRef.current.loop = true;
-    audioRef.current.volume = 0.4;
-    return () => {
-      audioRef.current?.pause();
-    };
-  }, []);
 
   const handleClick = useCallback(() => {
     // Start music
-    if (!isPlaying && audioRef.current) {
-      audioRef.current.play().catch(() => {});
+    if (!isPlaying) {
       setIsPlaying(true);
     }
 
@@ -64,6 +54,17 @@ const Index = () => {
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background">
+      {/* Hidden YouTube player for music */}
+      {isPlaying && (
+        <iframe
+          ref={iframeRef}
+          className="absolute h-0 w-0 opacity-0"
+          src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&loop=1&playlist=${YOUTUBE_VIDEO_ID}&controls=0`}
+          allow="autoplay"
+          title="Background music"
+        />
+      )}
+
       {/* Soft decorative circles */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
@@ -100,10 +101,7 @@ const Index = () => {
 
         {isPlaying && (
           <button
-            onClick={() => {
-              audioRef.current?.pause();
-              setIsPlaying(false);
-            }}
+            onClick={() => setIsPlaying(false)}
             className="mt-2 text-sm text-muted-foreground underline transition-colors hover:text-foreground font-body"
           >
             🎵 Stop music
