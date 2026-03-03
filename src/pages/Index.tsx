@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import FloatingCompliment from "@/components/FloatingCompliment";
 import Sparkles from "@/components/Sparkles";
 
@@ -30,42 +30,57 @@ interface FloatingItem {
 
 const Index = () => {
   const [floatingItems, setFloatingItems] = useState<FloatingItem[]>([]);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isActive, setIsActive] = useState(false);
   const [showSparkles, setShowSparkles] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const counterRef = useRef(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const handleClick = useCallback(() => {
-    // Start music
-    if (!isPlaying) {
-      setIsPlaying(true);
-    }
-
-    setShowSparkles(true);
-    setTimeout(() => setShowSparkles(false), 1500);
-
-    // Spawn all compliments with staggered delays
-    const newItems: FloatingItem[] = compliments.map((text, i) => ({
+  const spawnCompliment = useCallback(() => {
+    const text = compliments[Math.floor(Math.random() * compliments.length)];
+    const item: FloatingItem = {
       id: counterRef.current++,
       text,
-      x: 15 + Math.random() * 70, // random horizontal position (%)
-      delay: i * 0.4,
-    }));
-
-    setFloatingItems((prev) => [...prev, ...newItems]);
-
-    // Clean up after animation
+      x: 10 + Math.random() * 80,
+      delay: 0,
+    };
+    setFloatingItems((prev) => [...prev, item]);
     setTimeout(() => {
-      setFloatingItems((prev) =>
-        prev.filter((item) => !newItems.find((n) => n.id === item.id))
-      );
-    }, 5000);
-  }, [isPlaying]);
+      setFloatingItems((prev) => prev.filter((i) => i.id !== item.id));
+    }, 4000);
+  }, []);
+
+  useEffect(() => {
+    if (isActive) {
+      // Spawn one immediately
+      spawnCompliment();
+      intervalRef.current = setInterval(spawnCompliment, 800);
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    }
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [isActive, spawnCompliment]);
+
+  const handleStart = useCallback(() => {
+    setIsActive(true);
+    setShowSparkles(true);
+    setTimeout(() => setShowSparkles(false), 1500);
+  }, []);
+
+  const handleStop = useCallback(() => {
+    setIsActive(false);
+    setFloatingItems([]);
+  }, []);
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background">
       {/* Hidden YouTube player for music */}
-      {isPlaying && (
+      {isActive && (
         <iframe
           ref={iframeRef}
           className="absolute h-0 w-0 opacity-0"
@@ -101,20 +116,20 @@ const Index = () => {
           Press the button and see what I think of you 💛
         </p>
 
-        <button
-          onClick={handleClick}
-          className="group relative animate-gentle-bounce rounded-full bg-primary px-10 py-4 text-xl font-bold text-primary-foreground shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl active:scale-95 font-body"
-        >
-          {showSparkles && <Sparkles />}
-          Jaylynn
-        </button>
-
-        {isPlaying && (
+        {!isActive ? (
           <button
-            onClick={() => setIsPlaying(false)}
-            className="mt-2 text-sm text-muted-foreground underline transition-colors hover:text-foreground font-body"
+            onClick={handleStart}
+            className="group relative animate-gentle-bounce rounded-full bg-primary px-10 py-4 text-xl font-bold text-primary-foreground shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl active:scale-95 font-body"
           >
-            🎵 Stop music
+            {showSparkles && <Sparkles />}
+            Jaylynn
+          </button>
+        ) : (
+          <button
+            onClick={handleStop}
+            className="rounded-full bg-secondary px-10 py-4 text-xl font-bold text-secondary-foreground shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl active:scale-95 font-body"
+          >
+            🎵 Stop
           </button>
         )}
       </div>
