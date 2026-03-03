@@ -34,23 +34,6 @@ const Index = () => {
   const [showSparkles, setShowSparkles] = useState(false);
   const counterRef = useRef(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const playerRef = useRef<any>(null);
-  const playerContainerRef = useRef<HTMLDivElement | null>(null);
-  const apiReadyRef = useRef(false);
-
-  // Load YouTube IFrame API once
-  useEffect(() => {
-    if ((window as any).YT) {
-      apiReadyRef.current = true;
-      return;
-    }
-    const tag = document.createElement("script");
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.head.appendChild(tag);
-    (window as any).onYouTubeIframeAPIReady = () => {
-      apiReadyRef.current = true;
-    };
-  }, []);
 
   const spawnCompliment = useCallback(() => {
     const text = compliments[Math.floor(Math.random() * compliments.length)];
@@ -81,48 +64,31 @@ const Index = () => {
     };
   }, [isActive, spawnCompliment]);
 
-  const startMusic = useCallback(() => {
-    if (playerRef.current) {
-      playerRef.current.playVideo();
-      return;
-    }
-    if (!apiReadyRef.current || !playerContainerRef.current) return;
-    playerRef.current = new (window as any).YT.Player(playerContainerRef.current, {
-      height: "0",
-      width: "0",
-      videoId: YOUTUBE_VIDEO_ID,
-      playerVars: {
-        autoplay: 1,
-        loop: 1,
-        playlist: YOUTUBE_VIDEO_ID,
-        controls: 0,
-        playsinline: 1,
-      },
-      events: {
-        onReady: (event: any) => event.target.playVideo(),
-      },
-    });
-  }, []);
-
   const handleStart = useCallback(() => {
     setIsActive(true);
     setShowSparkles(true);
     setTimeout(() => setShowSparkles(false), 1500);
-    startMusic();
-  }, [startMusic]);
+  }, []);
 
   const handleStop = useCallback(() => {
     setIsActive(false);
     setFloatingItems([]);
-    if (playerRef.current && playerRef.current.pauseVideo) {
-      playerRef.current.pauseVideo();
-    }
   }, []);
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background">
-      {/* Hidden YouTube player container */}
-      <div ref={playerContainerRef} className="absolute h-0 w-0 opacity-0" />
+      {/* YouTube player - visible but tiny in corner so mobile allows playback */}
+      {isActive && (
+        <div className="fixed bottom-4 right-4 z-50 overflow-hidden rounded-full shadow-lg" style={{ width: 48, height: 48 }}>
+          <iframe
+            className="pointer-events-none"
+            style={{ width: 300, height: 300, marginTop: -126, marginLeft: -126 }}
+            src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&loop=1&playlist=${YOUTUBE_VIDEO_ID}&controls=0&playsinline=1`}
+            allow="autoplay; encrypted-media"
+            title="Background music"
+          />
+        </div>
+      )}
 
       {/* Soft decorative circles */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
