@@ -2,6 +2,13 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import FloatingCompliment from "@/components/FloatingCompliment";
 import Sparkles from "@/components/Sparkles";
 
+declare global {
+  interface Window {
+    YT: any;
+    onYouTubeIframeAPIReady: () => void;
+  }
+}
+
 const compliments = [
   "You are the best ✨",
   "You are so cute 🌸",
@@ -17,6 +24,7 @@ const compliments = [
   "You are absolutely beautiful 🌹",
   "Your smile is magic ✨",
   "You are loved beyond words 💕",
+  "You love matcha 🍵",
 ];
 
 const YOUTUBE_VIDEO_ID = "TS0moaD8gO0";
@@ -32,8 +40,62 @@ const Index = () => {
   const [floatingItems, setFloatingItems] = useState<FloatingItem[]>([]);
   const [isActive, setIsActive] = useState(false);
   const [showSparkles, setShowSparkles] = useState(false);
+  const [isPlayerReady, setIsPlayerReady] = useState(false);
+  const playerRef = useRef<any>(null);
   const counterRef = useRef(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    // Load the IFrame Player API code asynchronously
+    if (!window.YT) {
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      const firstScriptTag = document.getElementsByTagName("script")[0];
+      if (firstScriptTag && firstScriptTag.parentNode) {
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      } else {
+        document.head.appendChild(tag);
+      }
+    }
+
+    const initPlayer = () => {
+      // Prevent double initialization
+      if (playerRef.current) return;
+
+      playerRef.current = new window.YT.Player("youtube-player", {
+        height: "100%",
+        width: "100%",
+        videoId: YOUTUBE_VIDEO_ID,
+        playerVars: {
+          autoplay: 0,
+          playsinline: 1,
+          controls: 0,
+          loop: 1,
+          playlist: YOUTUBE_VIDEO_ID,
+        },
+        events: {
+          onReady: () => {
+            setIsPlayerReady(true);
+          },
+        },
+      });
+    };
+
+    if (window.YT && window.YT.Player) {
+      initPlayer();
+    } else {
+      window.onYouTubeIframeAPIReady = () => {
+        initPlayer();
+      };
+    }
+
+    return () => {
+      if (playerRef.current?.destroy) {
+        playerRef.current.destroy();
+        playerRef.current = null;
+      }
+    };
+  }, []);
 
   const spawnCompliment = useCallback(() => {
     const text = compliments[Math.floor(Math.random() * compliments.length)];
@@ -65,30 +127,36 @@ const Index = () => {
   }, [isActive, spawnCompliment]);
 
   const handleStart = useCallback(() => {
+    if (playerRef.current && isPlayerReady) {
+      playerRef.current.playVideo();
+    }
     setIsActive(true);
     setShowSparkles(true);
     setTimeout(() => setShowSparkles(false), 1500);
-  }, []);
+  }, [isPlayerReady]);
 
   const handleStop = useCallback(() => {
+    if (playerRef.current && isPlayerReady) {
+      playerRef.current.pauseVideo();
+    }
     setIsActive(false);
     setFloatingItems([]);
-  }, []);
+  }, [isPlayerReady]);
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background">
-      {/* YouTube player - visible but tiny in corner so mobile allows playback */}
-      {isActive && (
-        <div className="fixed bottom-4 right-4 z-50 overflow-hidden rounded-full shadow-lg" style={{ width: 48, height: 48 }}>
-          <iframe
-            className="pointer-events-none"
-            style={{ width: 300, height: 300, marginTop: -126, marginLeft: -126 }}
-            src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&loop=1&playlist=${YOUTUBE_VIDEO_ID}&controls=0&playsinline=1`}
-            allow="autoplay; encrypted-media"
-            title="Background music"
-          />
+      {/* YouTube player - Unconditionally mounted but visually hidden when inactive so API is ready */}
+      <div
+        className={`fixed bottom-4 right-4 z-50 overflow-hidden rounded-full shadow-lg transition-opacity duration-300 ${isActive ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        style={{ width: 48, height: 48 }}
+      >
+        <div
+          className="pointer-events-none"
+          style={{ width: 300, height: 300, marginTop: -126, marginLeft: -126 }}
+        >
+          <div id="youtube-player" title="Background music"></div>
         </div>
-      )}
+      </div>
 
       {/* Soft decorative circles */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
