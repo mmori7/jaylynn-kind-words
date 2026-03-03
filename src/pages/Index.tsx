@@ -7,9 +7,19 @@ const compliments = [
   "You are so cute 🌸",
   "You are perfect 💫",
   "You are so smart 🧠",
+  "You make my heart smile 💖",
+  "You are my sunshine 🌞",
+  "I love your laugh 😊",
+  "You are one of a kind 🦋",
+  "You deserve the world 🌍",
+  "You light up every room 💡",
+  "I'm so lucky to know you 🍀",
+  "You are absolutely beautiful 🌹",
+  "Your smile is magic ✨",
+  "You are loved beyond words 💕",
 ];
 
-const YOUTUBE_VIDEO_ID = "SPxwz_id6So";
+const YOUTUBE_VIDEO_ID = "TS0moaD8gO0";
 
 interface FloatingItem {
   id: number;
