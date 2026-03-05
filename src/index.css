@@ -48,6 +48,39 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 340 65% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+
+    --font-display: 'Water Brush', cursive;
+    --font-body: 'Water Brush', cursive;
+  }
 }
 
 @layer base {
@@ -69,6 +102,17 @@
   .font-body {
     font-family: var(--font-body);
   }
+
+  .dark-theme {
+    font-family: var(--font-display);
+    font-size: 1.25em;
+    /* Water brush needs to be bigger */
+  }
+
+  .dark-theme .font-body,
+  .dark-theme .font-display {
+    font-family: 'Water Brush', cursive;
+  }
 }
 
 @keyframes float-up {
@@ -76,13 +120,16 @@
     opacity: 0;
     transform: translateY(40px) scale(0.5) rotate(-5deg);
   }
+
   15% {
     opacity: 1;
     transform: translateY(0px) scale(1) rotate(0deg);
   }
+
   85% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
     transform: translateY(-300px) scale(0.8) rotate(5deg);
@@ -90,13 +137,29 @@
 }
 
 @keyframes sparkle {
-  0%, 100% { opacity: 0; transform: scale(0); }
-  50% { opacity: 1; transform: scale(1); }
+
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes gentle-bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 .animate-float-up {
@@ -109,4 +172,38 @@
 
 .animate-gentle-bounce {
   animation: gentle-bounce 2s ease-in-out infinite;
+}
+
+@keyframes float-heart {
+  0% {
+    opacity: 0;
+    transform: translate(0, 110vh) scale(0.4) rotate(-10deg);
+  }
+
+  20% {
+    opacity: 0.9;
+    transform: translate(-30px, 80vh) scale(0.6) rotate(15deg);
+  }
+
+  40% {
+    transform: translate(40px, 50vh) scale(0.8) rotate(-15deg);
+  }
+
+  60% {
+    transform: translate(-30px, 20vh) scale(1) rotate(20deg);
+  }
+
+  80% {
+    opacity: 0.8;
+    transform: translate(30px, -10vh) scale(1.1) rotate(-10deg);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(0, -30vh) scale(1.2) rotate(5deg);
+  }
+}
+
+.animate-float-heart {
+  animation: float-heart 12s ease-in-out infinite;
 }
