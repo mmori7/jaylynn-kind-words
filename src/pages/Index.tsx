@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
+import "@fontsource/water-brush";
 import FloatingCompliment from "@/components/FloatingCompliment";
 import Sparkles from "@/components/Sparkles";
 
@@ -132,6 +133,7 @@ const Index = () => {
     }
     setIsActive(true);
     setShowSparkles(true);
+    document.documentElement.classList.add("dark");
     setTimeout(() => setShowSparkles(false), 1500);
   }, [isPlayerReady]);
 
@@ -141,10 +143,11 @@ const Index = () => {
     }
     setIsActive(false);
     setFloatingItems([]);
+    document.documentElement.classList.remove("dark");
   }, [isPlayerReady]);
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background">
+    <div className={`relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background transition-colors duration-1000 ${isActive ? 'dark-theme' : ''}`}>
       {/* YouTube player - Unconditionally mounted but visually hidden when inactive so API is ready */}
       <div
         className={`fixed bottom-4 right-4 z-50 overflow-hidden rounded-full shadow-lg transition-opacity duration-300 ${isActive ? "opacity-100" : "opacity-0 pointer-events-none"}`}
@@ -159,11 +162,45 @@ const Index = () => {
       </div>
 
       {/* Soft decorative circles */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute -right-20 bottom-20 h-80 w-80 rounded-full bg-secondary/15 blur-3xl" />
-        <div className="absolute left-1/3 top-1/4 h-40 w-40 rounded-full bg-accent/10 blur-2xl" />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-1000">
+        <div className={`absolute -left-20 -top-20 h-64 w-64 rounded-full blur-3xl transition-colors duration-1000 ${isActive ? 'bg-rose-500/20' : 'bg-primary/10'}`} />
+        <div className={`absolute -right-20 bottom-20 h-80 w-80 rounded-full blur-3xl transition-colors duration-1000 ${isActive ? 'bg-purple-500/20' : 'bg-secondary/15'}`} />
+        <div className={`absolute left-1/3 top-1/4 h-40 w-40 rounded-full blur-2xl transition-colors duration-1000 ${isActive ? 'bg-pink-500/20' : 'bg-accent/10'}`} />
       </div>
+
+      {/* Glowing Hearts Background for Dark Theme */}
+      {isActive && (
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          {Array.from({ length: 15 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-5xl text-rose-500 blur-[2px] opacity-0 animate-float-heart"
+              style={{
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 10}s`,
+                animationDuration: `${10 + Math.random() * 10}s`,
+                filter: 'drop-shadow(0 0 10px rgba(244, 63, 94, 0.8))',
+              }}
+            >
+              💖
+            </div>
+          ))}
+          {Array.from({ length: 10 }).map((_, i) => (
+            <div
+              key={`star-${i}`}
+              className="absolute text-3xl text-yellow-300 blur-[1px] opacity-0 animate-float-heart"
+              style={{
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 10}s`,
+                animationDuration: `${15 + Math.random() * 5}s`,
+                filter: 'drop-shadow(0 0 8px rgba(253, 224, 71, 0.8))',
+              }}
+            >
+              ✨
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Floating compliments */}
       {floatingItems.map((item) => (
@@ -178,7 +215,7 @@ const Index = () => {
       {/* Main content */}
       <div className="relative z-10 flex flex-col items-center gap-8 px-4 text-center">
         <h1 className="font-display text-4xl text-foreground sm:text-5xl md:text-6xl">
-          Hey Jaylynn!
+          Hey Jelly Belly!
         </h1>
         <p className="max-w-md text-lg text-muted-foreground font-body">
           Press the button and see what I think of you 💛
@@ -200,6 +237,10 @@ const Index = () => {
             🎵 Stop
           </button>
         )}
+
+        <div className="mt-8 text-3xl font-display text-muted-foreground/80 animate-fade-in" style={{ animationDelay: '0.8s' }}>
+          - Ronit(dumbie)
+        </div>
       </div>
     </div>
   );
