@@ -7,11 +7,11 @@ interface FloatingComplimentProps {
 const FloatingCompliment = ({ text, x, delay }: FloatingComplimentProps) => {
   return (
     <div
-      className="animate-float-up pointer-events-none absolute bottom-1/3 z-20 rounded-2xl bg-card px-6 py-3 text-lg font-semibold text-foreground shadow-md font-body"
+      className="pointer-events-none absolute z-20 whitespace-nowrap rounded-full bg-card/80 px-6 py-3 font-medium text-card-foreground shadow-lg backdrop-blur-sm animate-float-up transition-colors duration-1000 dark:bg-card/40 dark:text-rose-200 dark:shadow-rose-500/20 font-body dark:font-display dark:text-3xl"
       style={{
         left: `${x}%`,
-        animationDelay: `${delay}s`,
-        opacity: 0,
+        bottom: "-20px",
+        animationDelay: `${delay}ms`,
       }}
     >
       {text}
