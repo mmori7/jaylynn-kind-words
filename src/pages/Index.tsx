@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import "@fontsource/water-brush";
 import FloatingCompliment from "@/components/FloatingCompliment";
+import FloatingImage from "@/components/FloatingImage";
 import Sparkles from "@/components/Sparkles";
 
 declare global {
@@ -28,13 +29,24 @@ const compliments = [
   "You love matcha 🍵",
 ];
 
+const nailImages = [
+  "/nails/1.jpg",
+  "/nails/2.png",
+  "/nails/3.png",
+  "/nails/4.png",
+  "/nails/5.png",
+];
+
 const YOUTUBE_VIDEO_ID = "TS0moaD8gO0";
 
 interface FloatingItem {
   id: number;
-  text: string;
+  type: 'compliment' | 'image';
+  text?: string;
+  imageSrc?: string;
   x: number;
   delay: number;
+  rotation?: number;
 }
 
 const Index = () => {
@@ -99,17 +111,33 @@ const Index = () => {
   }, []);
 
   const spawnCompliment = useCallback(() => {
-    const text = compliments[Math.floor(Math.random() * compliments.length)];
-    const item: FloatingItem = {
-      id: counterRef.current++,
-      text,
-      x: 10 + Math.random() * 80,
-      delay: 0,
-    };
+    const isImage = Math.random() > 0.7; // 30% chance to spawn an image
+
+    let item: FloatingItem;
+
+    if (isImage) {
+      item = {
+        id: counterRef.current++,
+        type: 'image',
+        imageSrc: nailImages[Math.floor(Math.random() * nailImages.length)],
+        x: 10 + Math.random() * 80,
+        delay: 0,
+        rotation: (Math.random() - 0.5) * 40, // Random rotation between -20 and 20 deg
+      };
+    } else {
+      item = {
+        id: counterRef.current++,
+        type: 'compliment',
+        text: compliments[Math.floor(Math.random() * compliments.length)],
+        x: 10 + Math.random() * 80,
+        delay: 0,
+      };
+    }
+
     setFloatingItems((prev) => [...prev, item]);
     setTimeout(() => {
       setFloatingItems((prev) => prev.filter((i) => i.id !== item.id));
-    }, 4000);
+    }, 4500); // Slightly longer for images to finish floating
   }, []);
 
   useEffect(() => {
@@ -202,14 +230,24 @@ const Index = () => {
         </div>
       )}
 
-      {/* Floating compliments */}
+      {/* Floating compliments and images */}
       {floatingItems.map((item) => (
-        <FloatingCompliment
-          key={item.id}
-          text={item.text}
-          x={item.x}
-          delay={item.delay}
-        />
+        item.type === 'compliment' ? (
+          <FloatingCompliment
+            key={item.id}
+            text={item.text!}
+            x={item.x}
+            delay={item.delay}
+          />
+        ) : (
+          <FloatingImage
+            key={item.id}
+            src={item.imageSrc!}
+            x={item.x}
+            delay={item.delay}
+            rotation={item.rotation || 0}
+          />
+        )
       ))}
 
       {/* Main content */}
