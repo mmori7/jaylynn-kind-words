@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
+// @ts-ignore - fontsource package works at runtime
 import "@fontsource/water-brush";
 import FloatingCompliment from "@/components/FloatingCompliment";
 import FloatingImage from "@/components/FloatingImage";
@@ -199,34 +200,40 @@ const Index = () => {
       {/* Glowing Hearts Background for Dark Theme */}
       {isActive && (
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          {Array.from({ length: 15 }).map((_, i) => (
-            <div
-              key={i}
-              className="absolute text-5xl text-rose-500 blur-[2px] opacity-0 animate-float-heart"
-              style={{
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 10}s`,
-                animationDuration: `${10 + Math.random() * 10}s`,
-                filter: 'drop-shadow(0 0 10px rgba(244, 63, 94, 0.8))',
-              }}
-            >
-              💖
-            </div>
-          ))}
-          {Array.from({ length: 10 }).map((_, i) => (
-            <div
-              key={`star-${i}`}
-              className="absolute text-3xl text-yellow-300 blur-[1px] opacity-0 animate-float-heart"
-              style={{
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 10}s`,
-                animationDuration: `${15 + Math.random() * 5}s`,
-                filter: 'drop-shadow(0 0 8px rgba(253, 224, 71, 0.8))',
-              }}
-            >
-              ✨
-            </div>
-          ))}
+          {Array.from({ length: 15 }).map((_, i) => {
+            const duration = 10 + Math.random() * 12;
+            return (
+              <div
+                key={i}
+                className="absolute text-5xl text-rose-500 opacity-0 animate-float-heart"
+                style={{
+                  left: `${5 + Math.random() * 90}%`,
+                  animationDelay: `${i * 1.2}s`,
+                  ['--heart-duration' as any]: `${duration}s`,
+                  filter: 'drop-shadow(0 0 8px rgba(244, 63, 94, 0.6))',
+                }}
+              >
+                💖
+              </div>
+            );
+          })}
+          {Array.from({ length: 10 }).map((_, i) => {
+            const duration = 12 + Math.random() * 10;
+            return (
+              <div
+                key={`star-${i}`}
+                className="absolute text-3xl text-yellow-300 opacity-0 animate-float-heart"
+                style={{
+                  left: `${5 + Math.random() * 90}%`,
+                  animationDelay: `${i * 1.5 + 2}s`,
+                  ['--heart-duration' as any]: `${duration}s`,
+                  filter: 'drop-shadow(0 0 6px rgba(253, 224, 71, 0.6))',
+                }}
+              >
+                ✨
+              </div>
+            );
+          })}
         </div>
       )}
 
