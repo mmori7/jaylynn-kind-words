@@ -288,6 +288,44 @@ const Index = () => {
           </button>
         )}
 
+        {/* AI Compliment Button */}
+        <button
+          onClick={async () => {
+            setIsLoadingAi(true);
+            setAiCompliment(null);
+            try {
+              const res = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyACOXCD6H6hmUck__XFPY2ddjkt_S6eoQY`,
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    contents: [{
+                      parts: [{ text: "Give me one sweet, unique, short compliment (max 15 words) for a girl named Jaylynn. Be creative, cute, and use an emoji. Just the compliment, nothing else." }]
+                    }]
+                  })
+                }
+              );
+              const data = await res.json();
+              const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "You're amazing, Jaylynn! 💖";
+              setAiCompliment(text.trim());
+            } catch {
+              setAiCompliment("You're incredible, Jaylynn! ✨");
+            }
+            setIsLoadingAi(false);
+          }}
+          disabled={isLoadingAi}
+          className="rounded-full bg-accent px-8 py-3 text-lg font-bold text-accent-foreground shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 font-body disabled:opacity-50"
+        >
+          {isLoadingAi ? "Thinking... 💭" : "AI Compliment ✨"}
+        </button>
+
+        {aiCompliment && (
+          <div className="max-w-sm rounded-2xl bg-card/80 px-6 py-4 text-center text-xl font-display text-card-foreground shadow-xl backdrop-blur-sm animate-fade-in dark:bg-card/40 dark:text-rose-200 dark:shadow-rose-500/20">
+            {aiCompliment}
+          </div>
+        )}
+
         <div className="mt-8 text-3xl font-display text-muted-foreground/80 animate-fade-in" style={{ animationDelay: '0.8s' }}>
           - Ronit(dumbie)
         </div>
