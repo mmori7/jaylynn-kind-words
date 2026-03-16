@@ -58,6 +58,8 @@ const Index = () => {
   const [isActive, setIsActive] = useState(false);
   const [showSparkles, setShowSparkles] = useState(false);
   const [isPlayerReady, setIsPlayerReady] = useState(false);
+  const [aiCompliment, setAiCompliment] = useState<string | null>(null);
+  const [isLoadingAi, setIsLoadingAi] = useState(false);
   const playerRef = useRef<any>(null);
   const counterRef = useRef(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
