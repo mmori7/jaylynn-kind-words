@@ -199,20 +199,23 @@ const Index = () => {
       {/* Glowing Hearts Background for Dark Theme */}
       {isActive && (
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          {Array.from({ length: 15 }).map((_, i) => (
-            <div
-              key={i}
-              className="absolute text-5xl text-rose-500 blur-[2px] opacity-0 animate-float-heart"
-              style={{
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 10}s`,
-                animationDuration: `${10 + Math.random() * 10}s`,
-                filter: 'drop-shadow(0 0 10px rgba(244, 63, 94, 0.8))',
-              }}
-            >
-              💖
-            </div>
-          ))}
+          {Array.from({ length: 15 }).map((_, i) => {
+            const duration = 10 + Math.random() * 12;
+            return (
+              <div
+                key={i}
+                className="absolute text-5xl text-rose-500 opacity-0 animate-float-heart"
+                style={{
+                  left: `${5 + Math.random() * 90}%`,
+                  animationDelay: `${i * 1.2}s`,
+                  ['--heart-duration' as any]: `${duration}s`,
+                  filter: 'drop-shadow(0 0 8px rgba(244, 63, 94, 0.6))',
+                }}
+              >
+                💖
+              </div>
+            );
+          })}
           {Array.from({ length: 10 }).map((_, i) => (
             <div
               key={`star-${i}`}
