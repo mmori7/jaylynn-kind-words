@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
+// @ts-ignore - fontsource package works at runtime
 import "@fontsource/water-brush";
 import FloatingCompliment from "@/components/FloatingCompliment";
 import FloatingImage from "@/components/FloatingImage";
