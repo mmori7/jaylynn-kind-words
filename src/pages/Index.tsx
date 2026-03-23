@@ -294,7 +294,7 @@ const Index = () => {
 
 
         <div className="mt-8 text-3xl font-display text-muted-foreground/80 animate-fade-in" style={{ animationDelay: '0.8s' }}>
-          - Ronit(dumbie)
+          - Pancake boy :)
         </div>
       </div>
     </div>
