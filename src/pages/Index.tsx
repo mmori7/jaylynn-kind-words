@@ -5,6 +5,7 @@ import FloatingCompliment from "@/components/FloatingCompliment";
 import FloatingImage from "@/components/FloatingImage";
 import Sparkles from "@/components/Sparkles";
 import SorryCard from "@/components/SorryCard";
+import StarConstellation from "@/components/StarConstellation";
 
 declare global {
   interface Window {
