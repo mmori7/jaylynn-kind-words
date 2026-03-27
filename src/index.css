@@ -215,3 +215,53 @@
 .animate-twinkle {
   animation: twinkle var(--twinkle-duration, 3s) ease-in-out infinite;
 }
+
+/* Liquid button styles */
+.liquid-btn {
+  background: linear-gradient(135deg, #f43f5e, #e11d48, #be123c);
+  border: none;
+  cursor: pointer;
+}
+
+.liquid-btn-purple {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9, #5b21b6);
+}
+
+.liquid-blob {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+  border-radius: 45% 55% 50% 50%;
+  animation: liquid-move 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.liquid-blob-2 {
+  border-radius: 55% 45% 48% 52%;
+  animation-delay: -2s;
+  animation-duration: 5s;
+  opacity: 0.6;
+}
+
+.liquid-blob-purple {
+  background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 55%);
+}
+
+@keyframes liquid-move {
+  0% { transform: rotate(0deg) translate(10%, 10%); }
+  25% { transform: rotate(90deg) translate(-5%, 15%); }
+  50% { transform: rotate(180deg) translate(10%, -5%); }
+  75% { transform: rotate(270deg) translate(-10%, 10%); }
+  100% { transform: rotate(360deg) translate(10%, 10%); }
+}
+
+.liquid-btn:hover .liquid-blob {
+  animation-duration: 2s;
+}
+
+.liquid-btn:active {
+  filter: brightness(1.2);
+}

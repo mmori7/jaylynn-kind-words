@@ -311,7 +311,7 @@ const Index = () => {
           Press the button and see what I think of you 💛
         </p>
 
-        <div className="flex gap-4 flex-wrap justify-center">
+        <div className="flex gap-5 flex-wrap justify-center">
           {!isActive ? (
             <button
               onClick={handleStart}
@@ -332,20 +332,24 @@ const Index = () => {
           {!isActive && (
             <button
               onClick={handleSorry}
-              className="rounded-full bg-rose-500/80 px-10 py-4 text-xl font-bold text-white shadow-lg transition-all duration-300 hover:scale-110 hover:bg-rose-500 hover:shadow-xl active:scale-95 font-body animate-gentle-bounce"
+              className="liquid-btn relative overflow-hidden rounded-full px-10 py-4 text-xl font-bold text-white shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl active:scale-95 font-body animate-gentle-bounce"
               style={{ animationDelay: '0.3s' }}
             >
-              Sorry 🥺
+              <span className="liquid-blob"></span>
+              <span className="liquid-blob liquid-blob-2"></span>
+              <span className="relative z-10">Sorry 🥺</span>
             </button>
           )}
 
           {!isActive && (
             <button
               onClick={() => setShowStars(true)}
-              className="rounded-full bg-indigo-600/80 px-10 py-4 text-xl font-bold text-white shadow-lg transition-all duration-300 hover:scale-110 hover:bg-indigo-600 hover:shadow-xl active:scale-95 font-body animate-gentle-bounce"
+              className="liquid-btn liquid-btn-purple relative overflow-hidden rounded-full px-10 py-4 text-xl font-bold text-white shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl active:scale-95 font-body animate-gentle-bounce"
               style={{ animationDelay: '0.6s' }}
             >
-              ✨ Stars
+              <span className="liquid-blob liquid-blob-purple"></span>
+              <span className="liquid-blob liquid-blob-purple liquid-blob-2"></span>
+              <span className="relative z-10">Surprise 🎁</span>
             </button>
           )}
         </div>
