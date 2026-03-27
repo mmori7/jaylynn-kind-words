@@ -231,6 +231,9 @@ const Index = () => {
       {/* Sorry Card */}
       {showSorry && <SorryCard onClose={handleCloseSorry} />}
 
+      {/* Star Constellation */}
+      {showStars && <StarConstellation onClose={() => setShowStars(false)} />}
+
       {/* Soft decorative circles */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-1000">
         <div className={`absolute -left-20 -top-20 h-64 w-64 rounded-full blur-3xl transition-colors duration-1000 ${isActive ? 'bg-rose-500/20' : 'bg-primary/10'}`} />
