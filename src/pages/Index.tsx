@@ -4,6 +4,7 @@ import "@fontsource/water-brush";
 import FloatingCompliment from "@/components/FloatingCompliment";
 import FloatingImage from "@/components/FloatingImage";
 import Sparkles from "@/components/Sparkles";
+import SorryCard from "@/components/SorryCard";
 
 declare global {
   interface Window {
@@ -42,6 +43,7 @@ const nailImages = [
 ];
 
 const YOUTUBE_VIDEO_ID = "TS0moaD8gO0";
+const SORRY_VIDEO_ID = "HTFXx1uvE7E";
 
 interface FloatingItem {
   id: number;
@@ -59,8 +61,11 @@ const Index = () => {
   const [isActive, setIsActive] = useState(false);
   const [showSparkles, setShowSparkles] = useState(false);
   const [isPlayerReady, setIsPlayerReady] = useState(false);
+  const [showSorry, setShowSorry] = useState(false);
+  const [isSorryPlayerReady, setIsSorryPlayerReady] = useState(false);
 
   const playerRef = useRef<any>(null);
+  const sorryPlayerRef = useRef<any>(null);
   const counterRef = useRef(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -100,19 +105,30 @@ const Index = () => {
       });
     };
 
+    const initSorryPlayer = () => {
+      if (sorryPlayerRef.current) return;
+      sorryPlayerRef.current = new window.YT.Player("youtube-sorry-player", {
+        height: "100%",
+        width: "100%",
+        videoId: SORRY_VIDEO_ID,
+        playerVars: { autoplay: 0, playsinline: 1, controls: 0, loop: 1, playlist: SORRY_VIDEO_ID },
+        events: { onReady: () => setIsSorryPlayerReady(true) },
+      });
+    };
+
     if (window.YT && window.YT.Player) {
       initPlayer();
+      initSorryPlayer();
     } else {
       window.onYouTubeIframeAPIReady = () => {
         initPlayer();
+        initSorryPlayer();
       };
     }
 
     return () => {
-      if (playerRef.current?.destroy) {
-        playerRef.current.destroy();
-        playerRef.current = null;
-      }
+      if (playerRef.current?.destroy) { playerRef.current.destroy(); playerRef.current = null; }
+      if (sorryPlayerRef.current?.destroy) { sorryPlayerRef.current.destroy(); sorryPlayerRef.current = null; }
     };
   }, []);
 
@@ -182,20 +198,36 @@ const Index = () => {
     document.documentElement.classList.remove("dark");
   }, [isPlayerReady]);
 
+  const handleSorry = useCallback(() => {
+    if (sorryPlayerRef.current && isSorryPlayerReady) {
+      sorryPlayerRef.current.playVideo();
+    }
+    setShowSorry(true);
+  }, [isSorryPlayerReady]);
+
+  const handleCloseSorry = useCallback(() => {
+    if (sorryPlayerRef.current && isSorryPlayerReady) {
+      sorryPlayerRef.current.pauseVideo();
+    }
+    setShowSorry(false);
+  }, [isSorryPlayerReady]);
+
   return (
     <div className={`relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background transition-colors duration-1000 ${isActive ? 'dark-theme' : ''}`}>
-      {/* YouTube player - Unconditionally mounted but visually hidden when inactive so API is ready */}
-      <div
-        className={`fixed bottom-4 right-4 z-50 overflow-hidden rounded-full shadow-lg transition-opacity duration-300 ${isActive ? "opacity-100" : "opacity-0 pointer-events-none"}`}
-        style={{ width: 48, height: 48 }}
-      >
-        <div
-          className="pointer-events-none"
-          style={{ width: 300, height: 300, marginTop: -126, marginLeft: -126 }}
-        >
+      {/* YouTube players */}
+      <div className={`fixed bottom-4 right-4 z-50 overflow-hidden rounded-full shadow-lg transition-opacity duration-300 ${isActive ? "opacity-100" : "opacity-0 pointer-events-none"}`} style={{ width: 48, height: 48 }}>
+        <div className="pointer-events-none" style={{ width: 300, height: 300, marginTop: -126, marginLeft: -126 }}>
           <div id="youtube-player" title="Background music"></div>
         </div>
       </div>
+      <div className={`fixed bottom-4 left-4 z-50 overflow-hidden rounded-full shadow-lg transition-opacity duration-300 ${showSorry ? "opacity-100" : "opacity-0 pointer-events-none"}`} style={{ width: 48, height: 48 }}>
+        <div className="pointer-events-none" style={{ width: 300, height: 300, marginTop: -126, marginLeft: -126 }}>
+          <div id="youtube-sorry-player" title="Sorry music"></div>
+        </div>
+      </div>
+
+      {/* Sorry Card */}
+      {showSorry && <SorryCard onClose={handleCloseSorry} />}
 
       {/* Soft decorative circles */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-1000">
@@ -274,22 +306,34 @@ const Index = () => {
           Press the button and see what I think of you 💛
         </p>
 
-        {!isActive ? (
-          <button
-            onClick={handleStart}
-            className="group relative animate-gentle-bounce rounded-full bg-primary px-10 py-4 text-xl font-bold text-primary-foreground shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl active:scale-95 font-body"
-          >
-            {showSparkles && <Sparkles />}
-            Jaylynn
-          </button>
-        ) : (
-          <button
-            onClick={handleStop}
-            className="rounded-full bg-secondary px-10 py-4 text-xl font-bold text-secondary-foreground shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl active:scale-95 font-body"
-          >
-            🎵 Stop
-          </button>
-        )}
+        <div className="flex gap-4 flex-wrap justify-center">
+          {!isActive ? (
+            <button
+              onClick={handleStart}
+              className="group relative animate-gentle-bounce rounded-full bg-primary px-10 py-4 text-xl font-bold text-primary-foreground shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl active:scale-95 font-body"
+            >
+              {showSparkles && <Sparkles />}
+              Jaylynn
+            </button>
+          ) : (
+            <button
+              onClick={handleStop}
+              className="rounded-full bg-secondary px-10 py-4 text-xl font-bold text-secondary-foreground shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl active:scale-95 font-body"
+            >
+              🎵 Stop
+            </button>
+          )}
+
+          {!isActive && (
+            <button
+              onClick={handleSorry}
+              className="rounded-full bg-rose-500/80 px-10 py-4 text-xl font-bold text-white shadow-lg transition-all duration-300 hover:scale-110 hover:bg-rose-500 hover:shadow-xl active:scale-95 font-body animate-gentle-bounce"
+              style={{ animationDelay: '0.3s' }}
+            >
+              Sorry 🥺
+            </button>
+          )}
+        </div>
 
 
 
