@@ -338,6 +338,16 @@ const Index = () => {
               Sorry 🥺
             </button>
           )}
+
+          {!isActive && (
+            <button
+              onClick={() => setShowStars(true)}
+              className="rounded-full bg-indigo-600/80 px-10 py-4 text-xl font-bold text-white shadow-lg transition-all duration-300 hover:scale-110 hover:bg-indigo-600 hover:shadow-xl active:scale-95 font-body animate-gentle-bounce"
+              style={{ animationDelay: '0.6s' }}
+            >
+              ✨ Stars
+            </button>
+          )}
         </div>
 
 
