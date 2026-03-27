@@ -5,6 +5,7 @@ import FloatingCompliment from "@/components/FloatingCompliment";
 import FloatingImage from "@/components/FloatingImage";
 import Sparkles from "@/components/Sparkles";
 import SorryCard from "@/components/SorryCard";
+import StarConstellation from "@/components/StarConstellation";
 
 declare global {
   interface Window {
@@ -63,6 +64,7 @@ const Index = () => {
   const [isPlayerReady, setIsPlayerReady] = useState(false);
   const [showSorry, setShowSorry] = useState(false);
   const [isSorryPlayerReady, setIsSorryPlayerReady] = useState(false);
+  const [showStars, setShowStars] = useState(false);
 
   const playerRef = useRef<any>(null);
   const sorryPlayerRef = useRef<any>(null);
@@ -229,6 +231,9 @@ const Index = () => {
       {/* Sorry Card */}
       {showSorry && <SorryCard onClose={handleCloseSorry} />}
 
+      {/* Star Constellation */}
+      {showStars && <StarConstellation onClose={() => setShowStars(false)} />}
+
       {/* Soft decorative circles */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-1000">
         <div className={`absolute -left-20 -top-20 h-64 w-64 rounded-full blur-3xl transition-colors duration-1000 ${isActive ? 'bg-rose-500/20' : 'bg-primary/10'}`} />
@@ -331,6 +336,16 @@ const Index = () => {
               style={{ animationDelay: '0.3s' }}
             >
               Sorry 🥺
+            </button>
+          )}
+
+          {!isActive && (
+            <button
+              onClick={() => setShowStars(true)}
+              className="rounded-full bg-indigo-600/80 px-10 py-4 text-xl font-bold text-white shadow-lg transition-all duration-300 hover:scale-110 hover:bg-indigo-600 hover:shadow-xl active:scale-95 font-body animate-gentle-bounce"
+              style={{ animationDelay: '0.6s' }}
+            >
+              ✨ Stars
             </button>
           )}
         </div>
