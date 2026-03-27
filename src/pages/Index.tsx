@@ -332,9 +332,41 @@ const Index = () => {
           {!isActive && (
             <button
               onClick={handleSorry}
-              className="liquid-btn relative overflow-hidden rounded-full px-10 py-4 text-xl font-bold text-white shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl active:scale-95 font-body animate-gentle-bounce"
+              onMouseDown={(e) => {
+                const btn = e.currentTarget;
+                btn.classList.remove('liquid-released');
+                btn.classList.add('liquid-pressed');
+              }}
+              onMouseUp={(e) => {
+                const btn = e.currentTarget;
+                btn.classList.remove('liquid-pressed');
+                btn.classList.add('liquid-released');
+                setTimeout(() => btn.classList.remove('liquid-released'), 500);
+              }}
+              onMouseLeave={(e) => {
+                const btn = e.currentTarget;
+                btn.classList.remove('liquid-pressed');
+              }}
+              onTouchStart={(e) => {
+                const btn = e.currentTarget;
+                btn.classList.remove('liquid-released');
+                btn.classList.add('liquid-pressed');
+              }}
+              onTouchEnd={(e) => {
+                const btn = e.currentTarget;
+                btn.classList.remove('liquid-pressed');
+                btn.classList.add('liquid-released');
+                setTimeout(() => btn.classList.remove('liquid-released'), 500);
+              }}
+              className="liquid-btn relative overflow-hidden rounded-full px-10 py-4 text-xl font-bold text-white shadow-lg font-body animate-gentle-bounce"
               style={{ animationDelay: '0.3s' }}
             >
+              <span className="liquid-drip"></span>
+              <span className="liquid-drip"></span>
+              <span className="liquid-drip"></span>
+              <span className="liquid-drip"></span>
+              <span className="liquid-drip"></span>
+              <span className="liquid-drip"></span>
               <span className="liquid-blob"></span>
               <span className="liquid-blob liquid-blob-2"></span>
               <span className="relative z-10">Sorry 🥺</span>
@@ -344,9 +376,41 @@ const Index = () => {
           {!isActive && (
             <button
               onClick={() => setShowStars(true)}
-              className="liquid-btn liquid-btn-purple relative overflow-hidden rounded-full px-10 py-4 text-xl font-bold text-white shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl active:scale-95 font-body animate-gentle-bounce"
+              onMouseDown={(e) => {
+                const btn = e.currentTarget;
+                btn.classList.remove('liquid-released');
+                btn.classList.add('liquid-pressed');
+              }}
+              onMouseUp={(e) => {
+                const btn = e.currentTarget;
+                btn.classList.remove('liquid-pressed');
+                btn.classList.add('liquid-released');
+                setTimeout(() => btn.classList.remove('liquid-released'), 500);
+              }}
+              onMouseLeave={(e) => {
+                const btn = e.currentTarget;
+                btn.classList.remove('liquid-pressed');
+              }}
+              onTouchStart={(e) => {
+                const btn = e.currentTarget;
+                btn.classList.remove('liquid-released');
+                btn.classList.add('liquid-pressed');
+              }}
+              onTouchEnd={(e) => {
+                const btn = e.currentTarget;
+                btn.classList.remove('liquid-pressed');
+                btn.classList.add('liquid-released');
+                setTimeout(() => btn.classList.remove('liquid-released'), 500);
+              }}
+              className="liquid-btn liquid-btn-purple relative overflow-hidden rounded-full px-10 py-4 text-xl font-bold text-white shadow-lg font-body animate-gentle-bounce"
               style={{ animationDelay: '0.6s' }}
             >
+              <span className="liquid-drip"></span>
+              <span className="liquid-drip"></span>
+              <span className="liquid-drip"></span>
+              <span className="liquid-drip"></span>
+              <span className="liquid-drip"></span>
+              <span className="liquid-drip"></span>
               <span className="liquid-blob liquid-blob-purple"></span>
               <span className="liquid-blob liquid-blob-purple liquid-blob-2"></span>
               <span className="relative z-10">Surprise 🎁</span>
