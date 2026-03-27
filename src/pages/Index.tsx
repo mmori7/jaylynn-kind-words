@@ -64,6 +64,7 @@ const Index = () => {
   const [isPlayerReady, setIsPlayerReady] = useState(false);
   const [showSorry, setShowSorry] = useState(false);
   const [isSorryPlayerReady, setIsSorryPlayerReady] = useState(false);
+  const [showStars, setShowStars] = useState(false);
 
   const playerRef = useRef<any>(null);
   const sorryPlayerRef = useRef<any>(null);
