@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
+import AuroraBorealis from "./AuroraBorealis";
 
 const starMessages = [
   "You make the world brighter just by being in it ✨",
@@ -130,14 +131,7 @@ const StarConstellation = ({ onClose }: { onClose: () => void }) => {
       </svg>
 
       {/* Northern Lights / Aurora Borealis */}
-      {showAurora && (
-        <div className="absolute inset-0 pointer-events-none animate-fade-in" style={{ zIndex: 4 }}>
-          <div className="aurora-layer aurora-green" />
-          <div className="aurora-layer aurora-teal" />
-          <div className="aurora-layer aurora-purple" />
-          <div className="aurora-layer aurora-pink" />
-        </div>
-      )}
+      {showAurora && <AuroraBorealis />}
 
       {/* Clickable stars */}
       <div ref={canvasRef} className="absolute inset-0" style={{ zIndex: 10 }}>
