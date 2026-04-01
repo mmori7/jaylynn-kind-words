@@ -75,7 +75,8 @@ const StarConstellation = ({ onClose }: { onClose: () => void }) => {
     if (newCount === stars.length) {
       setTimeout(() => {
         setCurrentMessage(null);
-        setShowFinalMessage(true);
+        setShowAurora(true);
+        setTimeout(() => setShowFinalMessage(true), 2500);
       }, 3000);
     } else {
       setTimeout(() => setCurrentMessage(null), 3000);
