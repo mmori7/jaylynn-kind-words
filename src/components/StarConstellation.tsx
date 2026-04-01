@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
+import AuroraBorealis from "./AuroraBorealis";
 
 const starMessages = [
   "You make the world brighter just by being in it ✨",
