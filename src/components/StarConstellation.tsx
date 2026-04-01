@@ -44,6 +44,7 @@ const StarConstellation = ({ onClose }: { onClose: () => void }) => {
   const [currentMessage, setCurrentMessage] = useState<string | null>(null);
   const [revealedCount, setRevealedCount] = useState(0);
   const [showFinalMessage, setShowFinalMessage] = useState(false);
+  const [showAurora, setShowAurora] = useState(false);
   const [lines, setLines] = useState<{ x1: number; y1: number; x2: number; y2: number }[]>([]);
   const canvasRef = useRef<HTMLDivElement>(null);
   const lastRevealed = useRef<{ x: number; y: number } | null>(null);
@@ -74,7 +75,8 @@ const StarConstellation = ({ onClose }: { onClose: () => void }) => {
     if (newCount === stars.length) {
       setTimeout(() => {
         setCurrentMessage(null);
-        setShowFinalMessage(true);
+        setShowAurora(true);
+        setTimeout(() => setShowFinalMessage(true), 2500);
       }, 3000);
     } else {
       setTimeout(() => setCurrentMessage(null), 3000);
@@ -126,6 +128,16 @@ const StarConstellation = ({ onClose }: { onClose: () => void }) => {
           />
         ))}
       </svg>
+
+      {/* Northern Lights / Aurora Borealis */}
+      {showAurora && (
+        <div className="absolute inset-0 pointer-events-none animate-fade-in" style={{ zIndex: 4 }}>
+          <div className="aurora-layer aurora-green" />
+          <div className="aurora-layer aurora-teal" />
+          <div className="aurora-layer aurora-purple" />
+          <div className="aurora-layer aurora-pink" />
+        </div>
+      )}
 
       {/* Clickable stars */}
       <div ref={canvasRef} className="absolute inset-0" style={{ zIndex: 10 }}>
