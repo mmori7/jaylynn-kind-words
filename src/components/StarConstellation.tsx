@@ -44,6 +44,7 @@ const StarConstellation = ({ onClose }: { onClose: () => void }) => {
   const [currentMessage, setCurrentMessage] = useState<string | null>(null);
   const [revealedCount, setRevealedCount] = useState(0);
   const [showFinalMessage, setShowFinalMessage] = useState(false);
+  const [showAurora, setShowAurora] = useState(false);
   const [lines, setLines] = useState<{ x1: number; y1: number; x2: number; y2: number }[]>([]);
   const canvasRef = useRef<HTMLDivElement>(null);
   const lastRevealed = useRef<{ x: number; y: number } | null>(null);
