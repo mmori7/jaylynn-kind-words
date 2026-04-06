@@ -41,6 +41,7 @@ const nailImages = [
   "/nails/6.jpg",
   "/nails/7.jpg",
   "/nails/8.jpg",
+  "/nails/10.png",
 ];
 
 const YOUTUBE_VIDEO_ID = "TS0moaD8gO0";
